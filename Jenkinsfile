@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-       WEBSERVER = "APACHE"
+       WEBSERVER = "NGINX"
     }
 
     
