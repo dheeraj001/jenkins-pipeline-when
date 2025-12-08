@@ -3,7 +3,7 @@ pipeline {
     parameters {
        choice choices: ['NGINX', 'APACHE'], name: 'WEBSERVER'
        choice choices: ['Prod', 'Test', 'Dev'], name: 'Env'
-   }
+       }
 
 
     stages {
@@ -83,7 +83,7 @@ pipeline {
             }
         }
         // Error is Webserver is Apache and Env is Prod or Test
-        stage('Error Message Nginx ') {
+        stage('Error Message Apache ') {
            when {
                allof{
                environment name: 'WEBSERVER', value: 'APACHE'
