@@ -1,18 +1,21 @@
 pipeline {
     agent any
     parameters {
-       choice choices: ['Apache', 'Nginx'], name: 'WEBSERVER'
+      choice choices: ['NGINX', 'APACHE'], name: 'WEBSERVER'
     }
-       
+
+
+    
+
     stages {
         stage('Create  directory for the WEB Application')
         {
             steps{
                
                 //Fisrt, drop the directory if exists
-                sh 'rm -rf /home/jenkins/app-web'
+                sh 'rm -rf /var/lib/jenkins/app-web'
                 //Create the directory
-                sh 'mkdir /home/jenkins/app-web'
+                sh 'mkdir /var/lib/jenkins/app-web'
                 
             }
         }
@@ -24,31 +27,34 @@ pipeline {
         }
         // Apache Webserver
         stage('Create the Apache container') {
-            when {
-                 environment name: 'WEBSERVER', value: 'Apache'
-            }
+           when {
+               environment name: 'WEBSERVER', value: 'APACHE'
+           }
+
             steps {
             echo 'Creating the container...'
-            sh 'docker run -dit --name app-web -p 9100:80  -v /home/jenkins/app-web:/usr/local/apache2/htdocs/ httpd'
+            sh 'docker run -dit --name app-web -p 9100:80  -v /var/lib/jenkins/app-web:/usr/local/apache2/htdocs/ httpd'
             }
         }
-        //Nginx webserver
-        stage('Create the Nginx container') {
-            when {
-                 environment name: 'WEBSERVER', value: 'Nginx'
-            }
+        // Nginx Container
+         stage('Create the Nginx container') {
+           when {
+               environment name: 'WEBSERVER', value: 'NGINX'
+           }
+
             steps {
             echo 'Creating the container...'
-            sh 'docker run -dit --name app-web -p 9100:80  -v /home/jenkins/app-web:/usr/share/nginx/html nginx'
-         
+            sh 'docker run -dit --name app-web -p 9100:80  -v /var/lib/jenkins/app-web:/usr/share/nginx/html nginx'
             }
         }
+ 
+
 
         
         stage('Copy the web application to the container directory') {
             steps {
                 echo 'Copying web application...'             
-                sh 'cp -r web/* /home/jenkins/app-web'
+                sh 'cp -r web/* /var/lib/jenkins/app-web'
             }
         }
     }
