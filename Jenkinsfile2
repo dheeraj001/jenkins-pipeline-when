@@ -30,7 +30,7 @@ pipeline {
         // Apache Webserver
         stage('Create the Apache container') {
            when {
-               allof{
+               allOf{
                environment name: 'WEBSERVER', value: 'APACHE'
                environment name: 'Env', value: 'Dev'
                }
@@ -44,7 +44,7 @@ pipeline {
         // Nginx Container
          stage('Create the Nginx container for Test ') {
            when {
-               allof{
+               allOf{
                environment name: 'WEBSERVER', value: 'NGINX'
                environment name: 'Env', value: 'Test'
                }
@@ -58,7 +58,7 @@ pipeline {
  
           stage('Create the Nginx container for Prod ') {
            when {
-               allof{
+               allOf{
                environment name: 'WEBSERVER', value: 'NGINX'
                environment name: 'Env', value: 'Prod'
                }
@@ -72,7 +72,7 @@ pipeline {
         // Error is Webserver is Nginx and Env is Development
         stage('Error Message Nginx ') {
            when {
-               allof{
+               allOf{
                environment name: 'WEBSERVER', value: 'NGINX'
                environment name: 'Env', value: 'Dev'
                }
@@ -85,9 +85,9 @@ pipeline {
         // Error is Webserver is Apache and Env is Prod or Test
         stage('Error Message Apache ') {
            when {
-               allof{
+               allOf{
                environment name: 'WEBSERVER', value: 'APACHE'
-               anyof{
+               anyOf{
                environment name: 'Env', value: 'Prod'
                environment name: 'Env', value: 'Test'
                }
